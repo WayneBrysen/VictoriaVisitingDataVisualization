@@ -70,13 +70,13 @@ ui <- navbarPage(
   ),
   
   tabPanel(
-    "Good Place to Go",
+    "Find Tram to Take",
     fluidPage(
       fluidRow(
         tags$div(
           style = "position: relative; width: 100%; height: 600px; overflow: hidden;",
           tags$img(
-            src = "melbourneCity.webp",
+            src = "tram.jpg",
             style = "width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: -1;"
           ),
           tags$h1(
@@ -86,7 +86,7 @@ ui <- navbarPage(
                      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"
           ),
           tags$p(
-            "Discover the vibrant city of Melbourne, where art meets coffee culture, and historic landmarks blend with modern skyscrapers. Whether you're exploring hidden laneways or enjoying iconic beaches, Melbourne promises a memorable adventure.",
+            "Explore Melbourne the Easy Way – Hop on a Tram, Discover the City!",
             style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
                      color: white; font-size: 30px; font-weight: bold; padding: 10px; margin: 0; width: 80%; text-align: center;
                      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"
@@ -94,29 +94,28 @@ ui <- navbarPage(
         )
       ),
       
-      # Carouse
-      fluidRow(
-        h2('Discover'),
-        div(class = "carousel",
-            lapply(1:nrow(selected_data), function(i) {
-              div(
-                class = "carousel-item",
-                tags$img(src = selected_data$IMAGEURL[i], alt = selected_data$Feature.Name[i]),
-                div(
-                  class = "carousel-caption",
-                  p(selected_data$Feature.Name[i], style = "margin: 0;")
-                )
-              )
-            })
-        )
-      ),
-      
+      # # Carouse
+      # fluidRow(
+      #   h2('Discover'),
+      #   div(class = "carousel",
+      #       lapply(1:nrow(selected_data), function(i) {
+      #         div(
+      #           class = "carousel-item",
+      #           tags$img(src = selected_data$IMAGEURL[i], alt = selected_data$Feature.Name[i]),
+      #           div(
+      #             class = "carousel-caption",
+      #             p(selected_data$Feature.Name[i], style = "margin: 0;")
+      #           )
+      #         )
+      #       })
+      #   )
+      # ),
       # Tableau
       fluidRow(
-        h2('Find a Good Place to Go in Melbourne'),
+        h2('Find Tram to Take in Melbourne'),
         tableauPublicViz(
-          id = 'tableauViz',       
-          url = 'https://public.tableau.com/views/A3Table/InterestPointOnMelbourneCity?:language=en-US&publish=yes&:sid=&:display_count=n&:origin=viz_share_link',
+          id = 'tableauViz1',       
+          url = 'https://public.tableau.com/views/MelbournePTVTramMap/1_1?:language=zh-CN&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link',
           height = "600px"
         )
       )
@@ -128,6 +127,21 @@ ui <- navbarPage(
   tabPanel("Placeholder 3")
 )
 
-server <- function(input, output, session) {}
+server <- function(input, output, session) {
+  
+  # 监听用户选择的州，并动态过滤 Tableau 图表
+  observeEvent(input$plot_births_selected, {
+    # 清除之前的选择
+    session$sendCustomMessage(type='plot_births_set', message=character(0))
+    
+    # 获取用户选择的州
+    state <- input$plot_births_selected
+    
+    # 运行 JS 脚本，动态应用 Tableau 图表的过滤器
+    runjs(sprintf('let viz = document.getElementById("tableauViz");
+                   let sheet = viz.workbook.activeSheet;
+                   sheet.applyFilterAsync("State", ["%s"], tableau.FilterUpdateType.REPLACE);', state))
+  })
+}
 
 shinyApp(ui = ui, server = server, options = list(launch.browser = TRUE))
