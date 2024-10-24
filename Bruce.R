@@ -1,9 +1,8 @@
 library(shiny)
 library(shinyjs)
-
 source('tableau-in-shiny-v1.2.R')
 
-data <- read.csv("dataSet/landmarks-and-places-of-interest-including-schools-theatres-health-services-spor.csv", stringsAsFactors = FALSE)
+data <- read.csv("dataSet/Path.csv", stringsAsFactors = FALSE)
 
 set.seed(123) 
 selected_data <- data[sample(1:nrow(data), 10), ]
@@ -94,29 +93,30 @@ ui <- navbarPage(
         )
       ),
       
-      # # Carouse
-      # fluidRow(
-      #   h2('Discover'),
-      #   div(class = "carousel",
-      #       lapply(1:nrow(selected_data), function(i) {
-      #         div(
-      #           class = "carousel-item",
-      #           tags$img(src = selected_data$IMAGEURL[i], alt = selected_data$Feature.Name[i]),
-      #           div(
-      #             class = "carousel-caption",
-      #             p(selected_data$Feature.Name[i], style = "margin: 0;")
-      #           )
-      #         )
-      #       })
-      #   )
-      # ),
+      # Carouse
+      fluidRow(
+        h2('Trams'),
+        div(class = "carousel",
+            lapply(1:nrow(selected_data), function(i) {
+              div(
+                class = "carousel-item",
+                tags$img(src = selected_data$IMAGEURL[i], alt = selected_data$Feature.Name[i]),
+                div(
+                  class = "carousel-caption",
+                  p(selected_data$Feature.Name[i], style = "margin: 0;")
+                )
+              )
+            })
+        )
+      ),
+      
       # Tableau
       fluidRow(
         h2('Find Tram to Take in Melbourne'),
         tableauPublicViz(
           id = 'tableauViz1',       
           url = 'https://public.tableau.com/views/MelbournePTVTramMap/1_1?:language=zh-CN&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link',
-          height = "600px"
+          height = "1080px"
         )
       )
     )
@@ -129,19 +129,6 @@ ui <- navbarPage(
 
 server <- function(input, output, session) {
   
-  # 监听用户选择的州，并动态过滤 Tableau 图表
-  observeEvent(input$plot_births_selected, {
-    # 清除之前的选择
-    session$sendCustomMessage(type='plot_births_set', message=character(0))
-    
-    # 获取用户选择的州
-    state <- input$plot_births_selected
-    
-    # 运行 JS 脚本，动态应用 Tableau 图表的过滤器
-    runjs(sprintf('let viz = document.getElementById("tableauViz");
-                   let sheet = viz.workbook.activeSheet;
-                   sheet.applyFilterAsync("State", ["%s"], tableau.FilterUpdateType.REPLACE);', state))
-  })
 }
 
 shinyApp(ui = ui, server = server, options = list(launch.browser = TRUE))
