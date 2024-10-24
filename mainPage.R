@@ -123,11 +123,74 @@ ui <- navbarPage(
     )
   ),
   
-  tabPanel("Placeholder 1"),
+  tabPanel(
+    "Find Tram to Take",
+    fluidPage(
+      fluidRow(
+        tags$div(
+          style = "position: relative; width: 100%; height: 600px; overflow: hidden;",
+          tags$img(
+            src = "tram.jpg",
+            style = "width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: -1;"
+          ),
+          tags$h1(
+            "Victoria. Every Bit Different", 
+            style = "position: absolute; bottom: 10%; left: 2%; transform: translate(0, 0);
+                     color: white; font-size: 40px; font-weight: bold; padding: 10px; margin: 0;
+                     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"
+          ),
+          tags$p(
+            "Explore Melbourne the Easy Way – Hop on a Tram, Discover the City!",
+            style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                     color: white; font-size: 30px; font-weight: bold; padding: 10px; margin: 0; width: 80%; text-align: center;
+                     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"
+          )
+        )
+      ),
+      
+      # # Carouse
+      # fluidRow(
+      #   h2('Discover'),
+      #   div(class = "carousel",
+      #       lapply(1:nrow(selected_data), function(i) {
+      #         div(
+      #           class = "carousel-item",
+      #           tags$img(src = selected_data$IMAGEURL[i], alt = selected_data$Feature.Name[i]),
+      #           div(
+      #             class = "carousel-caption",
+      #             p(selected_data$Feature.Name[i], style = "margin: 0;")
+      #           )
+      #         )
+      #       })
+      #   )
+      # ),
+      # Tableau
+      fluidRow(
+        h2('Find Tram to Take in Melbourne'),
+        tableauPublicViz(
+          id = 'tableauViz1',       
+          url = 'https://public.tableau.com/views/MelbournePTVTramMap/1_1?:language=zh-CN&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link',
+          height = "600px"
+        )
+      )
+    )
+  ),
   tabPanel("Placeholder 2"),
   tabPanel("Placeholder 3")
 )
 
-server <- function(input, output, session) {}
+server <- function(input, output, session) {
+  
+  observeEvent(input$plot_births_selected, {
+    # Clear selection from bar chart
+    session$sendCustomMessage(type='plot_births_set', message=character(0))
+    
+    # Filter Tableau viz by the state that was clicked on the bar chart
+    state <- input$plot_births_selected
+    runjs(sprintf('let viz = document.getElementById("tableauViz");
+        let sheet = viz.workbook.activeSheet;
+        sheet.applyFilterAsync("State", ["%s"], FilterUpdateType.Replace);', state))
+  })
+}
 
 shinyApp(ui = ui, server = server, options = list(launch.browser = TRUE))
