@@ -191,6 +191,15 @@ ui <- navbarPage(
                        font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);",
               "Less Crowded Stations"
             )
+          ),
+          tags$div(
+            style = "position: relative; display: inline-block;",
+            tags$img(src = "bg.jpg", style = "width: 300px; max-width: 500px; height: 200px;"),
+            tags$div(
+              style = "position: absolute; top: 20px; left: 20px; color: white; font-size: 24px; 
+                       font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);",
+              "Better experience"
+            )
           )
         ),
         
