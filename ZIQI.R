@@ -157,42 +157,76 @@ ui <- navbarPage(
     )
   ),
   
-  # Your Section for Traffic Congestion - Placeholder 1
+
   tabPanel(
     "Traffic Congestion",
     fluidPage(
-      fluidRow(
-        h2(class = "section-title", 'Plan Your Trip with Melbourne Public Transport Insights'),
-        p(class = "section-description", "Welcome to our real-time public transport traffic guide! Whether you're looking for a quiet, scenic journey or want to head straight to the heart of the action, this section will help you navigate Melbourne's train stations by showing where the most and least crowded areas are."),
-        
-        # Adding your transport-related images with better alignment and size
-        div(class = "image-container",
-            tags$img(src = "trans.jpg", alt = "Melbourne Traffic Insights"),
-            tags$img(src = "tram.jpg", alt = "Melbourne Train Station")
+          fluidRow(
+            tags$div(
+              class = "custom-header",
+              tags$h1("Plan Your Trip with Melbourne Public Transport Insights"),
+              tags$p("Navigate Melbourne's busiest and quietest train stations with real-time data.")
+            )
+        ),
+      
+      
+    fluidRow(
+        h2('Discover the Traffic in Melbourne'),
+        div(
+          class = "image-container",
+          tags$div(
+            style = "position: relative; display: inline-block; margin-right: 10px;",
+            tags$img(src = "trans.jpg", style = "width: 300px; max-width: 500px; height: 200px;"),
+            tags$div(
+              style = "position: absolute; top: 20px; left: 20px; color: white; font-size: 24px; 
+                       font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);",
+              "Busiest Train Routes"
+            )
+          ),
+          tags$div(
+            style = "position: relative; display: inline-block;",
+            tags$img(src = "tram.jpg", style = "width: 300px; max-width: 500px; height: 200px;"),
+            tags$div(
+              style = "position: absolute; top: 20px; left: 20px; color: white; font-size: 24px; 
+                       font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);",
+              "Less Crowded Stations"
+            )
+          )
         ),
         
+
         p(class = "section-description", "The interactive map below highlights passenger traffic at Melbourne's major train stations. Larger bubbles indicate higher traffic, so you can avoid the rush and plan your trip with ease. Perfect for travelers who want to explore popular tourist destinations or find quieter spots to enjoy their visit."),
         
 
-        div(style = "text-align: center;",
-            fluidRow(
-              h2(class = "section-title", 'Explore Melbourne’s Train Station Traffic'),
-              tableauPublicViz(
-                id = 'tableauVizTraffic',       
-                url = 'https://public.tableau.com/shared/SFT7T6W6G?:display_count=n&:origin=viz_share_link',
-                height = "600px",
-                width = "100%"  
-              )
-            )
+        div(
+          h2(class = "section-title", 'Explore Melbourne’s Train Station Traffic'),
         ),
         
-        # Add some facts or trivia about train stations
+        div(style = "display: flex; justify-content: center; align-items: center;",
+            div(style = "flex: 1; margin-right: 20px;",  # left sheet
+                tableauPublicViz(
+                  id = 'tableauVizTrafficLeft',       
+                  url = 'https://public.tableau.com/views/BookA3_17289846245930/Sheet1?:language=zh-CN&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link',
+                  height = "600px",
+                  width = "80%"  
+                )
+            ),
+            div(style = "flex: 1;", # right sheet
+                tableauPublicViz(
+                  id = 'tableauVizTrafficRight',       
+                  url = 'https://public.tableau.com/views/BookA3_17289846245930/Sheet2?:language=zh-CN&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link',
+                  height = "600px",
+                  width = "80%"  
+                )
+            )
+        ),
+      
+
         p(class = "section-description", "Did you know? Flinders Street Station, located in the heart of the city, is one of the busiest stations, especially during peak hours. If you’re visiting iconic landmarks nearby, try traveling outside peak times to make your journey more comfortable."),
         
         p(class = "section-description", "Looking for a quieter station? Consider exploring areas like Brighton or Sandringham, which offer beautiful coastal views and fewer crowds, making for a more relaxing journey.")
-      )
     )
-  )
+  ))
   ,
   
   tabPanel("Placeholder 2"),
