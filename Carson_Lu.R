@@ -152,26 +152,14 @@ ui <- navbarPage(
         )
       ),
       
-      # Carouse
-      fluidRow(
-        h2('Parking Area'),
-        div(class = "carousel",
-            lapply(1:length(image_urls), function(i) {
-              div(
-                class = "carousel-item",
-                tags$img(src = image_urls[i], alt = paste("Image", i)),
-              )
-            })
-        )
-      ),
       
       # Tableau
       fluidRow(
         h2('Parking Statistics'),
         tableauPublicViz(
           id = 'tableauViz',       
-          url = 'https://public.tableau.com/shared/FBBQJXDWC?:display_count=n&:origin=viz_share_link',
-          height = "800px"
+          url = 'https://public.tableau.com/views/parking_17289827633250/Dashboard1?:language=zh-CN&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link',
+          height = "900px"
         )
       )
     )
