@@ -234,9 +234,9 @@ ui <- navbarPage(
         p(class = "section-description", "Did you know? Flinders Street Station, located in the heart of the city, is one of the busiest stations, especially during peak hours. If you’re visiting iconic landmarks nearby, try traveling outside peak times to make your journey more comfortable."),
         
         p(class = "section-description", "Looking for a quieter station? Consider exploring areas like Brighton or Sandringham, which offer beautiful coastal views and fewer crowds, making for a more relaxing journey.")
+      )
     )
-  ))
-  ,
+  ),
   
   tabPanel("Placeholder 2"),
   tabPanel("Placeholder 3")
