@@ -10,10 +10,15 @@ To start the interface, please follow these steps:
 
 ## Note on Layout and Tableau Public Embedding
 
-When the interface runs, you may notice that the Tableau Public embedded charts appear misaligned or displayed in a vertical (top-to-bottom) arrangement instead of the intended layout. This is a known issue that sometimes occurs with Tableau Public embeds within RStudio.
+When the interface runs, you may notice that the Tableau Public embedded charts appear misaligned or displayed in a vertical (top-to-bottom) arrangement instead of the intended layout. 
+
+This is a known issue that sometimes occurs with Tableau Public embeds within RStudio.
+
+Sometimes the images do not load.
 
 ### Solution
 If the layout appears unsatisfactory or charts are not displayed as intended:
-- **Refresh the page** to correct the alignment.
+- **Refresh the page to correct the alignment.
+- **If the images do not load, please click on the navigation dots below the images to view them.
 
 Thank you for using our interface!
