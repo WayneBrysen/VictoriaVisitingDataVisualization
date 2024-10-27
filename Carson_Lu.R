@@ -126,7 +126,7 @@ ui <- navbarPage(
     )
   ),
   
-  tabPanel("Placeholder 1"),
+  tabPanel("Find Tram to take"),
   tabPanel(
     "Parking Area",
     fluidPage(
@@ -144,11 +144,22 @@ ui <- navbarPage(
                      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"
           ),
           tags$p(
-            "Discover the vibrant city of Melbourne, Find place to park your car.",
+            "Discover the vibrant city of Melbourne, Find a place to park your car.",
             style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
                      color: white; font-size: 30px; font-weight: bold; padding: 10px; margin: 0; width: 80%; text-align: center;
                      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"
           )
+        )
+      ),
+      fluidRow(
+        h2('Parking Area'),
+        div(class = "carousel",
+            lapply(1:length(image_urls), function(i) {
+              div(
+                class = "carousel-item",
+                tags$img(src = image_urls[i], alt = paste("Image", i)),
+              )
+            })
         )
       ),
       
@@ -164,7 +175,7 @@ ui <- navbarPage(
       )
     )
   ),
-  tabPanel("Placeholder 3")
+  tabPanel("Traffic Congustion")
 )
 
 server <- function(input, output, session) {}
