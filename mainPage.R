@@ -4,13 +4,16 @@ library(shinyjs)
 source('tableau-in-shiny-v1.2.R')
 
 data <- read.csv("dataSet/landmarks-and-places-of-interest-including-schools-theatres-health-services-spor.csv", stringsAsFactors = FALSE)
-set.seed(123)
+
+set.seed(123) 
 selected_data <- data[sample(1:nrow(data), 10), ]
 
-data_path <- read.csv("dataSet/Path.csv", stringsAsFactors = FALSE)
-set.seed(123)
-selected_data_path <- data_path[sample(1:nrow(data), 10), ]
+dataPath <- read.csv("dataSet/Path.csv", stringsAsFactors = FALSE)
 
+set.seed(123) 
+selected_data_Path <- dataPath[sample(1:nrow(dataPath), 10), ]
+
+image_urls <- c("Parking/VictoriaStCarPark6.jpg", "Parking/1_Ynx2iGvAGw2JvM17IXad4g.jpg", "Parking/1575299567-parking.avif","Parking/c870x524.jpg", "Parking/Town-of-Victoria-Park-Stock-Photos-2023-275.jpg", "Parking/OIP.jpg", "Parking/Parking-scaled.jpg")  
 
 
 ui <- navbarPage(
@@ -18,9 +21,9 @@ ui <- navbarPage(
   header = setUpTableauInShiny(),
   
   tags$head(
+    useShinyjs(),
     tags$link(rel = "stylesheet", type = "text/css", href = "https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"),
     tags$link(rel = "stylesheet", type = "text/css", href = "https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"),
-    tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"),
     tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"),
     tags$style(HTML("
       .carousel-item {
@@ -61,17 +64,17 @@ ui <- navbarPage(
     ")),
     
     tags$script(HTML("
-      $(document).ready(function(){
-        $('.carousel').slick({
-          infinite: false,
-          slidesToShow: 5,
-          slidesToScroll: 2,
-          dots: true,
-          arrows: true,
-          draggable: true
-        });
+    $(document).on('shiny:sessioninitialized', function(){
+      $('.carousel').slick({
+        infinite: false,
+        slidesToShow: 5,
+        slidesToScroll: 2,
+        dots: true,
+        arrows: true,
+        draggable: true
       });
-    "))
+    });
+  "))
   ),
   
   tabPanel(
@@ -153,17 +156,20 @@ ui <- navbarPage(
         )
       ),
       
-      # Carouse
       fluidRow(
         h2('Trams'),
         div(class = "carousel",
-            lapply(1:nrow(selected_data_path), function(i) {
+            lapply(1:nrow(selected_data_Path), function(i) {
               div(
                 class = "carousel-item",
-                tags$img(src = selected_data_path$IMAGEURL[i], alt = selected_data_path$Feature.Name[i]),
+                a(
+                  href = "https://www.ptv.vic.gov.au/place/#PlacePage:::isNearMe=true&lat=-37.81535&lon=144.95525&_auth=88630f2e081885bc44385942f5c47ca8884a2c556aef64348538c16b1aac7e63", 
+                  target = "_blank",  # Open link in a new tab
+                  tags$img(src = selected_data_Path$IMAGEURL[i], alt = selected_data_Path$Feature.Name[i])
+                ),
                 div(
                   class = "carousel-caption",
-                  p(selected_data_path$Feature.Name[i], style = "margin: 0;")
+                  p(selected_data_Path$Feature.Name[i], style = "margin: 0;")
                 )
               )
             })
@@ -176,12 +182,11 @@ ui <- navbarPage(
         tableauPublicViz(
           id = 'tableauViz1',       
           url = 'https://public.tableau.com/views/MelbournePTVTramMap/1_1?:language=zh-CN&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link',
-          height = "1080px"
+          height = "600px"
         )
       )
     )
   ),
-  
   tabPanel(
     "Parking Area",
     fluidPage(
@@ -199,11 +204,22 @@ ui <- navbarPage(
                      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"
           ),
           tags$p(
-            "Discover the vibrant city of Melbourne, Find place to park your car.",
+            "Discover the vibrant city of Melbourne, Find a place to park your car.",
             style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
                      color: white; font-size: 30px; font-weight: bold; padding: 10px; margin: 0; width: 80%; text-align: center;
                      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"
           )
+        )
+      ),
+      fluidRow(
+        h2('Parking Area'),
+        div(class = "carousel",
+            lapply(1:length(image_urls), function(i) {
+              div(
+                class = "carousel-item",
+                tags$img(src = image_urls[i], alt = paste("Image", i)),
+              )
+            })
         )
       ),
       
@@ -213,8 +229,8 @@ ui <- navbarPage(
         h2('Parking Statistics'),
         tableauPublicViz(
           id = 'tableauViz',       
-          url = 'https://public.tableau.com/views/parking_17289827633250/Dashboard1?:language=zh-CN&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link',
-          height = "900px"
+          url = 'https://public.tableau.com/views/parking_17289827633250/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link',
+          height = "600px"
         )
       )
     )
@@ -301,6 +317,23 @@ ui <- navbarPage(
   ),
 )
 
-server <- function(input, output, session) {}
+server <- function(input, output, session) {
+  runjs("
+    $(document).on('shiny:value', function(event) {
+      if ($('.carousel').hasClass('slick-initialized')) {
+        $('.carousel').slick('refresh');
+      } else {
+        $('.carousel').slick({
+          infinite: false,
+          slidesToShow: 5,
+          slidesToScroll: 2,
+          dots: true,
+          arrows: true,
+          draggable: true
+        });
+      }
+    });
+  ")
+}
 
 shinyApp(ui = ui, server = server, options = list(launch.browser = TRUE))
