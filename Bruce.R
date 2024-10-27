@@ -69,6 +69,10 @@ ui <- navbarPage(
   ),
   
   tabPanel(
+    "Good Place to Go",
+  ),
+  
+  tabPanel(
     "Find Tram to Take",
     fluidPage(
       fluidRow(
@@ -93,14 +97,34 @@ ui <- navbarPage(
         )
       ),
       
-      # Carouse
+      # # Carouse
+      # fluidRow(
+      #   h2('Trams'),
+      #   div(class = "carousel",
+      #       lapply(1:nrow(selected_data), function(i) {
+      #         div(
+      #           class = "carousel-item",
+      #           tags$img(src = selected_data$IMAGEURL[i], alt = selected_data$Feature.Name[i]),
+      #           div(
+      #             class = "carousel-caption",
+      #             p(selected_data$Feature.Name[i], style = "margin: 0;")
+      #           )
+      #         )
+      #       })
+      #   )
+      # ),
+      
       fluidRow(
         h2('Trams'),
         div(class = "carousel",
             lapply(1:nrow(selected_data), function(i) {
               div(
                 class = "carousel-item",
-                tags$img(src = selected_data$IMAGEURL[i], alt = selected_data$Feature.Name[i]),
+                a(
+                  href = "https://www.ptv.vic.gov.au/place/#PlacePage:::isNearMe=true&lat=-37.81535&lon=144.95525&_auth=88630f2e081885bc44385942f5c47ca8884a2c556aef64348538c16b1aac7e63", 
+                  target = "_blank",  # Open link in a new tab
+                  tags$img(src = selected_data$IMAGEURL[i], alt = selected_data$Feature.Name[i])
+                ),
                 div(
                   class = "carousel-caption",
                   p(selected_data$Feature.Name[i], style = "margin: 0;")
@@ -121,10 +145,8 @@ ui <- navbarPage(
       )
     )
   ),
-  
-  tabPanel("Placeholder 1"),
-  tabPanel("Placeholder 2"),
-  tabPanel("Placeholder 3")
+  tabPanel("Parking Area"),
+  tabPanel("Traffic Congestion")
 )
 
 server <- function(input, output, session) {
