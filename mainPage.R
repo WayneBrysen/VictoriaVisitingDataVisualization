@@ -180,13 +180,14 @@ ui <- navbarPage(
       fluidRow(
         h2('Find Tram to Take in Melbourne'),
         tableauPublicViz(
-          id = 'tableauViz1',       
+          id = 'tableauVizTram',
           url = 'https://public.tableau.com/views/MelbournePTVTramMap/1_1?:language=zh-CN&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link',
-          height = "600px"
+          height = "1080px"
         )
       )
     )
   ),
+  
   tabPanel(
     "Parking Area",
     fluidPage(
@@ -223,14 +224,13 @@ ui <- navbarPage(
         )
       ),
       
-      
       # Tableau
       fluidRow(
         h2('Parking Statistics'),
         tableauPublicViz(
-          id = 'tableauViz',       
+          id = 'tableauViz1',
           url = 'https://public.tableau.com/views/parking_17289827633250/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link',
-          height = "600px"
+          height = "900px"
         )
       )
     )
