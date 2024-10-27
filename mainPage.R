@@ -4,9 +4,14 @@ library(shinyjs)
 source('tableau-in-shiny-v1.2.R')
 
 data <- read.csv("dataSet/landmarks-and-places-of-interest-including-schools-theatres-health-services-spor.csv", stringsAsFactors = FALSE)
-
-set.seed(123) 
+set.seed(123)
 selected_data <- data[sample(1:nrow(data), 10), ]
+
+data_path <- read.csv("dataSet/Path.csv", stringsAsFactors = FALSE)
+set.seed(123)
+selected_data_path <- data_path[sample(1:nrow(data), 10), ]
+
+
 
 ui <- navbarPage(
   title = "Discover Melbourne",
@@ -152,13 +157,13 @@ ui <- navbarPage(
       fluidRow(
         h2('Trams'),
         div(class = "carousel",
-            lapply(1:nrow(selected_data), function(i) {
+            lapply(1:nrow(selected_data_path), function(i) {
               div(
                 class = "carousel-item",
-                tags$img(src = selected_data$IMAGEURL[i], alt = selected_data$Feature.Name[i]),
+                tags$img(src = selected_data_path$IMAGEURL[i], alt = selected_data_path$Feature.Name[i]),
                 div(
                   class = "carousel-caption",
-                  p(selected_data$Feature.Name[i], style = "margin: 0;")
+                  p(selected_data_path$Feature.Name[i], style = "margin: 0;")
                 )
               )
             })
